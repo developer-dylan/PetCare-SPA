@@ -31,18 +31,32 @@ export function showRegister(container) {
       rolId: 2 // Always register as customer
     };
 
-    // Send user data to server
-    const res = await fetch('http://localhost:3000/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newUser)
-    });
+    try {
+      // Check if email already exists
+      const checkRes = await fetch(`http://localhost:3000/users?email=${newUser.email}`);
+      const existing = await checkRes.json();
+      if (existing.length > 0) {
+        alert('El correo ya está registrado.');
+        return;
+      }
 
-    if (res.ok) {
-      alert('Usuario registrado con éxito.');
-      location.hash = '#/login'; // Redirect to login
-    } else {
-      alert('Error al registrar usuario');
+      // Send new user data to the server
+      const res = await fetch('http://localhost:3000/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newUser)
+      });
+
+      // If successful, redirect to login
+      if (res.ok) {
+        alert('Usuario registrado con éxito.');
+        location.hash = '#/login';
+      } else {
+        alert('Error al registrar usuario');
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Error de red o del servidor');
     }
   });
 }

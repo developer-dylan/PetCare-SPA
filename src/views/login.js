@@ -15,20 +15,26 @@ export function showLogin(container) {
   document.getElementById('login-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Get values from inputs
-    const email = document.getElementById('login-email').value;
+    // Get input values
+    const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
 
-    // Check credentials in the server
-    const res = await fetch(`http://localhost:3000/users?email=${email}&password=${password}`);
-    const users = await res.json();
+    try {
+      // Request users from server
+      const res = await fetch(`http://localhost:3000/users?email=${email}&password=${password}`);
+      const users = await res.json();
 
-    if (users.length) {
-      // Save logged user in local storage
-      localStorage.setItem('currentUser', JSON.stringify(users[0]));
-      location.hash = '#/dashboard'; // Redirect to dashboard
-    } else {
-      alert('Credenciales inválidas');
+      // If user found, save to localStorage and redirect
+      if (users.length === 1) {
+        const user = users[0];
+        localStorage.setItem('currentUser', JSON.stringify(user)); // Save session
+        location.hash = '#/dashboard'; // Redirect to dashboard
+      } else {
+        alert('Credenciales inválidas');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Error al intentar iniciar sesión');
     }
   });
 }

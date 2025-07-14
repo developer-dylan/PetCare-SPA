@@ -14,42 +14,51 @@ export function router() {
   };
 
   const path = location.hash || '#/';
-  const app = document.getElementById('app');
+  const currentUser = localStorage.getItem('currentUser');
 
-  // Protection redirect if there is no active session
-  if (path === '#/dashboard' && !localStorage.getItem('currentUser')) {
+  // If user is logged in, redirect from landing to dashboard
+  if (currentUser && (path === '#/' || path === '')) {
+    location.hash = '#/dashboard';
+    return;
+  }
+
+  // Protect dashboard route, redirect to login if not logged in
+  if (path === '#/dashboard' && !currentUser) {
     location.hash = '#/login';
     return;
   }
 
+  const app = document.getElementById('app');
   app.innerHTML = '';
+
+  // Render the view corresponding to the route or 404 if none matches
   const render = routes[path] || showNotFound;
   render(app);
 
-  updateHeader(path);
+  actualizarHeader(path);
 }
 
-// Function to update header buttons depending on path and session
-function updateHeader(path) {
+function actualizarHeader(path) {
   const navContainer = document.getElementById('nav-buttons');
   const user = JSON.parse(localStorage.getItem('currentUser'));
 
   if (!navContainer) return;
 
+  // Show login/register buttons only when NOT logged in and on auth or landing pages
   if (path === '#/' || path === '#/login' || path === '#/register') {
-    // Show buttons only if user is NOT logged in
     if (!user) {
       navContainer.innerHTML = `
         <button onclick="location.hash='#/login'">Iniciar Sesión</button>
         <button onclick="location.hash='#/register'">Registrarse</button>
       `;
     } else {
+      // Show logout button when user is logged in
       navContainer.innerHTML = `
         <button id="logout-btn">Cerrar sesión</button>
       `;
       document.getElementById('logout-btn').addEventListener('click', () => {
-        localStorage.removeItem('currentUser');
-        location.hash = '#/';
+        localStorage.removeItem('currentUser');  // Clear session
+        location.hash = '#/';                    // Redirect to landing
       });
     }
   }
