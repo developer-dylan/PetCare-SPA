@@ -16,7 +16,7 @@ export function router() {
   const path = location.hash || '#/';
   const app = document.getElementById('app');
 
-  // 🛡️ Protección: redirige si no hay sesión
+  // Protección: redirige si no hay sesión
   if (path === '#/dashboard' && !localStorage.getItem('currentUser')) {
     location.hash = '#/login';
     return;
