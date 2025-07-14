@@ -16,7 +16,7 @@ export function router() {
   const path = location.hash || '#/';
   const app = document.getElementById('app');
 
-  // Protección: redirige si no hay sesión
+  // Protection redirect if there is no active session
   if (path === '#/dashboard' && !localStorage.getItem('currentUser')) {
     location.hash = '#/login';
     return;
@@ -26,17 +26,18 @@ export function router() {
   const render = routes[path] || showNotFound;
   render(app);
 
-  actualizarHeader(path);
+  updateHeader(path);
 }
 
-function actualizarHeader(path) {
+// Function to update header buttons depending on path and session
+function updateHeader(path) {
   const navContainer = document.getElementById('nav-buttons');
   const user = JSON.parse(localStorage.getItem('currentUser'));
 
   if (!navContainer) return;
 
   if (path === '#/' || path === '#/login' || path === '#/register') {
-    // Mostrar botones solo si NO está logueado
+    // Show buttons only if user is NOT logged in
     if (!user) {
       navContainer.innerHTML = `
         <button onclick="location.hash='#/login'">Iniciar Sesión</button>
