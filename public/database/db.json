@@ -1,11 +1,11 @@
 {
   "roles": [
     {
-      "id": 1,
+      "id": "1",
       "name": "worker"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "customer"
     }
   ],
@@ -13,9 +13,9 @@
     {
       "id": "c838",
       "name": "Admin",
-      "identidad": 1234567890,
-      "telefono": "0000000000",
-      "direccion": "Calle 0 # 0 0",
+      "identity": 1234567890,
+      "phone": "0000000000",
+      "addres": "Calle 0 # 0 0",
       "email": "admin@admin.com",
       "password": "admin12345",
       "rolId": 1
@@ -23,14 +23,36 @@
     {
       "id": "006a",
       "name": "User",
-      "identidad": "0987654321",
-      "telefono": "1111111111",
-      "direccion": "Calle 1 # 1 1",
+      "identy": "0987654321",
+      "phone": "1111111111",
+      "addres": "Calle 1 # 1 1",
       "email": "user@user.com",
       "password": "user12345",
       "rolId": 2
     }
   ],
-  "pets": [],
-  "stays": []
+  "pets": [
+    {
+      "id": "d19d",
+      "name": "Lulu",
+      "weight": 20,
+      "age": 4,
+      "race": "Gato",
+      "temper": "Normal",
+      "annotation": "",
+      "userId": "006a"
+    }
+  ],
+  "stays": [
+    {
+      "id": "4862",
+      "petId": "d19d",
+      "entry": "2025-07-14",
+      "exit": "2025-07-16",
+      "valueDay": 20000,
+      "valueTotal": 40000,
+      "completed": false,
+      "additionalServices": []
+    }
+  ]
 }

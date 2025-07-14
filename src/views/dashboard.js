@@ -1,4 +1,3 @@
-// showDashboard.js
 export function showDashboard(container) {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -10,13 +9,12 @@ export function showDashboard(container) {
   // Set dashboard layout
   container.innerHTML = `
     <section class="dashboard-section">
-      <h2>Bienvenido, ${currentUser.nombre}</h2>
+      <h2>Bienvenido, ${currentUser.name}</h2>
       <div id="dashboard-content"></div>
       <button id="logout-btn">Cerrar sesión</button>
     </section>
   `;
 
-  // Logout button
   const logoutBtn = container.querySelector('#logout-btn');
   logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('currentUser');
@@ -43,7 +41,6 @@ export function showDashboard(container) {
       </section>
     `;
 
-    // Fetch and render user list with roles
     fetch('http://localhost:3000/users')
       .then(res => res.json())
       .then(async users => {
@@ -51,13 +48,12 @@ export function showDashboard(container) {
         const roles = await rolesRes.json();
 
         document.getElementById('user-list').innerHTML = users.map(u => {
-          const rol = roles.find(r => r.id === u.rolId);
-          const rolNombre = rol ? rol.nombre : 'desconocido';
-          return `<li>${u.nombre} (${u.email}) - Rol: ${rolNombre}</li>`;
+          const role = roles.find(r => r.id == u.rolId);
+          const roleName = role ? role.name : 'Desconocido';
+          return `<li>${u.name} (${u.email}) - Role: ${roleName}</li>`;
         }).join('');
       });
 
-    // Fetch and render pet list with actions
     fetch('http://localhost:3000/pets')
       .then(res => res.json())
       .then(pets => {
@@ -69,7 +65,7 @@ export function showDashboard(container) {
 
         list.innerHTML = pets.map(pet => `
           <li>
-            ${pet.nombre} (${pet.raza})
+            ${pet.name} (${pet.race})
             <button class="edit-pet" data-id="${pet.id}">Editar</button>
             <button class="delete-pet" data-id="${pet.id}">Eliminar</button>
             <button class="create-stay" data-id="${pet.id}">Agregar estancia</button>
@@ -77,7 +73,6 @@ export function showDashboard(container) {
           </li>
         `).join('');
 
-        // Bind pet action buttons
         document.querySelectorAll('.create-stay').forEach(btn =>
           btn.addEventListener('click', () => showStayForm(btn.dataset.id))
         );
@@ -92,7 +87,6 @@ export function showDashboard(container) {
         );
       });
 
-    // Delete pet with validation
     async function deletePet(id) {
       const stays = await fetch(`http://localhost:3000/stays?petId=${id}`).then(r => r.json());
       if (stays.length) return alert('No puedes eliminar: tiene estancias.');
@@ -102,19 +96,18 @@ export function showDashboard(container) {
       res.ok ? location.reload() : alert('Error al eliminar');
     }
 
-    // Edit pet info
     async function editPet(id) {
       const pet = await fetch(`http://localhost:3000/pets/${id}`).then(r => r.json());
 
       const form = `
         <h4>Editar Mascota</h4>
         <form id="edit-pet-form">
-          <input type="text" value="${pet.nombre}" id="nombre" required />
-          <input type="number" value="${pet.peso}" id="peso" required />
-          <input type="number" value="${pet.edad}" id="edad" required />
-          <input type="text" value="${pet.raza}" id="raza" required />
-          <input type="text" value="${pet.anotaciones || ''}" id="anotaciones" />
-          <input type="text" value="${pet.temperamento || ''}" id="temperamento" />
+          <input type="text" value="${pet.name}" id="name" required />
+          <input type="number" value="${pet.weight}" id="weight" required />
+          <input type="number" value="${pet.age}" id="age" required />
+          <input type="text" value="${pet.race}" id="race" required />
+          <input type="text" value="${pet.annotation || ''}" id="annotation" />
+          <input type="text" value="${pet.temper || ''}" id="temper" />
           <button type="submit">Guardar</button>
         </form>
       `;
@@ -124,12 +117,12 @@ export function showDashboard(container) {
       document.getElementById('edit-pet-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const data = {
-          nombre: document.getElementById('nombre').value.trim(),
-          peso: parseFloat(document.getElementById('peso').value),
-          edad: parseInt(document.getElementById('edad').value),
-          raza: document.getElementById('raza').value.trim(),
-          anotaciones: document.getElementById('anotaciones').value.trim(),
-          temperamento: document.getElementById('temperamento').value.trim(),
+          name: document.getElementById('name').value.trim(),
+          weight: parseFloat(document.getElementById('weight').value),
+          age: parseInt(document.getElementById('age').value),
+          race: document.getElementById('race').value.trim(),
+          annotation: document.getElementById('annotation').value.trim(),
+          temper: document.getElementById('temper').value.trim(),
         };
 
         const res = await fetch(`http://localhost:3000/pets/${id}`, {
@@ -143,7 +136,6 @@ export function showDashboard(container) {
       });
     }
 
-    // Show list of stays for a pet
     function showStayList(petId) {
       const container = document.getElementById('stay-management');
       container.innerHTML = `
@@ -162,10 +154,10 @@ export function showDashboard(container) {
 
           list.innerHTML = stays.map(stay => `
             <li>
-              Ingreso: ${stay.ingreso} | Salida: ${stay.salida}<br>
-              Servicios: ${stay.serviciosAdicionales.join(', ')}<br>
-              Valor día: $${stay.valorDia} | Total: $${stay.valorTotal}<br>
-              Estado: ${stay.completada ? 'Completada' : 'En proceso'}
+              Ingreso: ${stay.entry} | Salida: ${stay.exit}<br>
+              Servicios: ${stay.additionalServices.join(', ')}<br>
+              Valor día: $${stay.valueDay} | Total: $${stay.valueTotal}<br>
+              Estado: ${stay.completed ? 'Completada' : 'En proceso'}
               <button class="edit-stay" data-id="${stay.id}">Editar</button>
               <button class="delete-stay" data-id="${stay.id}">Eliminar</button>
             </li>
@@ -181,44 +173,45 @@ export function showDashboard(container) {
         });
     }
 
-    // Edit a stay
     async function editStay(id) {
       const stay = await fetch(`http://localhost:3000/stays/${id}`).then(r => r.json());
 
       document.getElementById('stay-management').innerHTML = `
         <h4>Editar Estancia</h4>
         <form id="edit-stay-form">
-          <input type="date" id="ingreso" value="${stay.ingreso}" required />
-          <input type="date" id="salida" value="${stay.salida}" required />
-          <input type="text" id="servicios" value="${stay.serviciosAdicionales.join(', ')}" />
-          <input type="number" id="valorDia" value="${stay.valorDia}" required />
-          <label><input type="checkbox" id="completada" ${stay.completada ? 'checked' : ''}/> Completada</label>
+          <input type="date" id="entry" value="${stay.entry}" required />
+          <input type="date" id="exit" value="${stay.exit}" required />
+          <input type="text" id="services" value="${stay.additionalServices.join(', ')}" />
+          <input type="number" id="valueDay" value="${stay.valueDay}" required />
+          <label><input type="checkbox" id="completed" ${stay.completed ? 'checked' : ''}/> Completada</label>
           <button type="submit">Guardar</button>
         </form>
       `;
 
       document.getElementById('edit-stay-form').addEventListener('submit', async e => {
         e.preventDefault();
-        const ingreso = document.getElementById('ingreso').value;
-        const salida = document.getElementById('salida').value;
-        const valorDia = parseFloat(document.getElementById('valorDia').value);
-        const servicios = document.getElementById('servicios').value.split(',').map(s => s.trim()).filter(Boolean);
-        const completada = document.getElementById('completada').checked;
-        const dias = (new Date(salida) - new Date(ingreso)) / (1000 * 60 * 60 * 24) + 1;
+        const entry = document.getElementById('entry').value;
+        const exit = document.getElementById('exit').value;
+        const valueDay = parseFloat(document.getElementById('valueDay').value);
+        const services = document.getElementById('services').value.split(',').map(s => s.trim()).filter(Boolean);
+        const completed = document.getElementById('completed').checked;
 
-        const editado = {
-          ingreso,
-          salida,
-          valorDia,
-          valorTotal: dias * valorDia,
-          completada,
-          serviciosAdicionales: servicios
+        const daysDiff = (new Date(exit).getTime() - new Date(entry).getTime()) / (1000 * 60 * 60 * 24);
+        const days = Math.max(1, Math.round(daysDiff));
+
+        const edit = {
+          entry,
+          exit,
+          valueDay,
+          valueTotal: valueDay * days,
+          completed,
+          additionalServices: services
         };
 
         const res = await fetch(`http://localhost:3000/stays/${id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(editado)
+          body: JSON.stringify(edit)
         });
 
         if (res.ok) location.reload();
@@ -226,192 +219,248 @@ export function showDashboard(container) {
       });
     }
 
-    // Delete a stay
     async function deleteStay(id) {
       if (!confirm('¿Eliminar estancia?')) return;
       const res = await fetch(`http://localhost:3000/stays/${id}`, { method: 'DELETE' });
       res.ok ? location.reload() : alert('Error al eliminar');
     }
+
+    function showStayForm(petId) {
+      const container = document.getElementById('stay-management');
+      container.innerHTML = `
+        <h4>Registrar Estancia</h4>
+        <form id="stay-form">
+          <input type="date" id="entry" placeholder="Entrada"required />
+          <input type="date" id="exit" placeholder="Salida" required />
+          <input type="text" id="services" placeholder="Servicios adicionales (separados por coma)" />
+          <input type="number" id="valueDay" placeholder="Valor por día" required />
+          <button type="submit">Guardar</button>
+        </form>
+        <button id="cancel-stay">Cancelar</button>
+      `;
+
+      document.getElementById('stay-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const entry = document.getElementById('entry').value;
+        const exit = document.getElementById('exit').value;
+        const valueDay = parseFloat(document.getElementById('valueDay').value);
+        const services = document.getElementById('services').value
+          .split(',')
+          .map(s => s.trim())
+          .filter(Boolean);
+
+        const daysDiff = (new Date(exit).getTime() - new Date(entry).getTime()) / (1000 * 60 * 60 * 24);
+        const days = Math.max(1, Math.round(daysDiff));
+
+        const stay = {
+          petId,
+          entry,
+          exit,
+          valueDay,
+          valueTotal: valueDay * days,
+          completed: false,
+          additionalServices: services
+        };
+
+        const res = await fetch('http://localhost:3000/stays', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(stay)
+        });
+
+        if (res.ok) {
+          alert('Estancia registrada con éxito');
+          location.reload();
+        } else {
+          alert('Error al registrar estancia');
+        }
+      });
+
+      document.getElementById('cancel-stay').addEventListener('click', () => {
+        location.reload();
+      });
+    }
   }
 
   // CUSTOMER VIEW 
-if (currentUser.rolId === 2) {
-  content.innerHTML = `
+  if (currentUser.rolId === 2) {
+    content.innerHTML = `
     <h3>Mis Mascotas</h3>
     <ul id="pet-list">Cargando...</ul>
 
     <h4>Registrar nueva mascota</h4>
     <form id="pet-form">
-      <input type="text" id="pet-nombre" placeholder="Nombre" required />
-      <input type="number" id="pet-peso" placeholder="Peso (kg)" required />
-      <input type="number" id="pet-edad" placeholder="Edad (años)" required />
-      <input type="text" id="pet-raza" placeholder="Raza" required />
-      <input type="text" id="pet-temperamento" placeholder="Temperamento" required />
-      <input type="text" id="pet-anotaciones" placeholder="Anotaciones (opcional)" />
+      <input type="text" id="pet-name" placeholder="Nombre" required />
+      <input type="number" id="pet-weight" placeholder="Peso (kg)" required />
+      <input type="number" id="pet-age" placeholder="Edad (años)" required />
+      <input type="text" id="pet-race" placeholder="Raza" required />
+      <input type="text" id="pet-temper" placeholder="Temperamento" required />
+      <input type="text" id="pet-annotation" placeholder="Anotaciones (opcional)" />
       <button type="submit">Registrar Mascota</button>
     </form>
   `;
 
-  const petList = document.getElementById('pet-list');
+    const petList = document.getElementById('pet-list');
 
-  fetch('http://localhost:3000/pets')
-    .then(res => res.json())
-    .then(pets => {
-      const myPets = pets.filter(p => p.userId === currentUser.id);
+    fetch('http://localhost:3000/pets')
+      .then(res => res.json())
+      .then(pets => {
+        const myPets = pets.filter(p => p.userId === currentUser.id);
 
-      if (myPets.length === 0) {
-        petList.innerHTML = '<li>No tienes mascotas registradas aún.</li>';
-        return;
-      }
+        if (myPets.length === 0) {
+          petList.innerHTML = '<li>No tienes mascotas registradas aún.</li>';
+          return;
+        }
 
-      // Show all pets owned by current user
-      petList.innerHTML = myPets.map(pet => `
+        // Show all pets owned by current user
+        petList.innerHTML = myPets.map(pet => `
         <li>
-          <strong>${pet.nombre}</strong> (${pet.raza}, ${pet.temperamento})
+          <strong>${pet.name}</strong> (${pet.race}, ${pet.temper})
           <button class="edit-pet" data-id="${pet.id}">Editar</button>
           <button class="delete-pet" data-id="${pet.id}">Eliminar</button>
           <button class="view-stays" data-id="${pet.id}">Ver estancias</button>
         </li>
       `).join('');
 
-      // Delete pet button
-      document.querySelectorAll('.delete-pet').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const petId = btn.dataset.id;
-          const staysRes = await fetch(`http://localhost:3000/stays?petId=${petId}`);
-          const stays = await staysRes.json();
+        // Delete pet button
+        document.querySelectorAll('.delete-pet').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const petId = btn.dataset.id;
+            const staysRes = await fetch(`http://localhost:3000/stays?petId=${petId}`);
+            const stays = await staysRes.json();
 
-          if (stays.length > 0) {
-            alert('No puedes eliminar esta mascota porque tiene estancias registradas.');
-            return;
-          }
+            if (stays.length > 0) {
+              alert('No puedes eliminar esta mascota porque tiene estancias registradas.');
+              return;
+            }
 
-          if (!confirm('¿Seguro que quieres eliminar esta mascota?')) return;
+            if (!confirm('¿Seguro que quieres eliminar esta mascota?')) return;
 
-          const deleteRes = await fetch(`http://localhost:3000/pets/${petId}`, {
-            method: 'DELETE'
+            const deleteRes = await fetch(`http://localhost:3000/pets/${petId}`, {
+              method: 'DELETE'
+            });
+
+            if (deleteRes.ok) {
+              alert('Mascota eliminada con éxito');
+              location.reload();
+            } else {
+              alert('Error al eliminar mascota');
+            }
           });
-
-          if (deleteRes.ok) {
-            alert('Mascota eliminada con éxito');
-            location.reload();
-          } else {
-            alert('Error al eliminar mascota');
-          }
         });
-      });
 
-      // Edit pet button
-      document.querySelectorAll('.edit-pet').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const petId = btn.dataset.id;
-          const res = await fetch(`http://localhost:3000/pets/${petId}`);
-          const pet = await res.json();
+        // Edit pet button
+        document.querySelectorAll('.edit-pet').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const petId = btn.dataset.id;
+            const res = await fetch(`http://localhost:3000/pets/${petId}`);
+            const pet = await res.json();
 
-          content.innerHTML = `
-            <h3>Editar Mascota: ${pet.nombre}</h3>
+            content.innerHTML = `
+            <h3>Editar Mascota: ${pet.name}</h3>
             <form id="edit-pet-form">
-              <input type="text" id="edit-nombre" value="${pet.nombre}" required />
-              <input type="number" id="edit-peso" value="${pet.peso}" required />
-              <input type="number" id="edit-edad" value="${pet.edad}" required />
-              <input type="text" id="edit-raza" value="${pet.raza}" required />
-              <input type="text" id="edit-temperamento" value="${pet.temperamento}" required />
-              <input type="text" id="edit-anotaciones" value="${pet.anotaciones || ''}" />
+              <input type="text" id="edit-name" value="${pet.name}" required />
+              <input type="number" id="edit-weight" value="${pet.weight}" required />
+              <input type="number" id="edit-age" value="${pet.age}" required />
+              <input type="text" id="edit-race" value="${pet.race}" required />
+              <input type="text" id="edit-temper" value="${pet.temper}" required />
+              <input type="text" id="edit-annotation" value="${pet.annotation || ''}" />
               <button type="submit">Guardar Cambios</button>
               <button type="button" id="cancel-edit">Cancelar</button>
             </form>
           `;
 
-          // Submit pet update
-          document.getElementById('edit-pet-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const updatedPet = {
-              nombre: document.getElementById('edit-nombre').value.trim(),
-              peso: parseFloat(document.getElementById('edit-peso').value),
-              edad: parseInt(document.getElementById('edit-edad').value),
-              raza: document.getElementById('edit-raza').value.trim(),
-              temperamento: document.getElementById('edit-temperamento').value.trim(),
-              anotaciones: document.getElementById('edit-anotaciones').value.trim()
-            };
+            // Submit pet update
+            document.getElementById('edit-pet-form').addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const updatedPet = {
+                name: document.getElementById('edit-name').value.trim(),
+                weight: parseFloat(document.getElementById('edit-weight').value),
+                age: parseInt(document.getElementById('edit-age').value),
+                race: document.getElementById('edit-race').value.trim(),
+                temper: document.getElementById('edit-temper').value.trim(),
+                annotation: document.getElementById('edit-annotation').value.trim()
+              };
 
-            const updateRes = await fetch(`http://localhost:3000/pets/${petId}`, {
-              method: 'PATCH',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(updatedPet),
+              const updateRes = await fetch(`http://localhost:3000/pets/${petId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedPet),
+              });
+
+              if (updateRes.ok) {
+                alert('Mascota actualizada correctamente');
+                location.reload();
+              } else {
+                alert('Error al actualizar mascota');
+              }
             });
 
-            if (updateRes.ok) {
-              alert('Mascota actualizada correctamente');
-              location.reload();
-            } else {
-              alert('Error al actualizar mascota');
-            }
-          });
-
-          document.getElementById('cancel-edit').addEventListener('click', () => {
-            showDashboard(container);
+            document.getElementById('cancel-edit').addEventListener('click', () => {
+              showDashboard(container);
+            });
           });
         });
-      });
 
-      // View pet stays
-      document.querySelectorAll('.view-stays').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const petId = btn.dataset.id;
-          const container = document.getElementById('dashboard-content');
-          container.innerHTML = `<h3>Estancias de la mascota ID ${petId}</h3><ul id="stay-list">Cargando...</ul>`;
+        // View pet stays
+        document.querySelectorAll('.view-stays').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const petId = btn.dataset.id;
+            const container = document.getElementById('dashboard-content');
+            container.innerHTML = `<h3>Estancias de la mascota ID ${petId}</h3><ul id="stay-list">Cargando...</ul>`;
 
-          const res = await fetch(`http://localhost:3000/stays?petId=${petId}`);
-          const stays = await res.json();
+            const res = await fetch(`http://localhost:3000/stays?petId=${petId}`);
+            const stays = await res.json();
 
-          const list = document.getElementById('stay-list');
-          if (stays.length === 0) {
-            list.innerHTML = `<li>No hay estancias registradas.</li>`;
-          } else {
-            list.innerHTML = stays.map(stay => `
+            const list = document.getElementById('stay-list');
+            if (stays.length === 0) {
+              list.innerHTML = `<li>No hay estancias registradas.</li>`;
+            } else {
+              list.innerHTML = stays.map(stay => `
               <li>
-                Ingreso: ${stay.ingreso} | Salida: ${stay.salida}<br>
-                Servicios: ${stay.serviciosAdicionales.join(', ') || 'Ninguno'}<br>
-                Valor Día: $${stay.valorDia} | Total: $${stay.valorTotal}<br>
-                Estado: ${stay.completada ? 'Completada' : 'En proceso'}
+                Ingreso: ${stay.entry} | Salida: ${stay.exit}<br>
+                Servicios: ${stay.additionalServices.join(', ') || 'Ninguno'}<br>
+                Valor Día: $${stay.valueDay} | Total: $${stay.valueTotal}<br>
+                Estado: ${stay.completed ? 'Completada' : 'En proceso'}
               </li>
             `).join('');
-          }
+            }
 
-          const backBtn = document.createElement('button');
-          backBtn.textContent = 'Regresar';
-          backBtn.addEventListener('click', () => showDashboard(container));
-          container.appendChild(backBtn);
+            const backBtn = document.createElement('button');
+            backBtn.textContent = 'Regresar';
+            backBtn.addEventListener('click', () => showDashboard(container));
+            container.appendChild(backBtn);
+          });
         });
       });
+
+    // Submit new pet
+    document.getElementById('pet-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const newPet = {
+        name: document.getElementById('pet-name').value.trim(),
+        weight: parseFloat(document.getElementById('pet-weight').value),
+        age: parseInt(document.getElementById('pet-age').value),
+        race: document.getElementById('pet-race').value.trim(),
+        temper: document.getElementById('pet-temper').value.trim(),
+        annotation: document.getElementById('pet-annotation').value.trim(),
+        userId: currentUser.id
+      };
+
+      const res = await fetch('http://localhost:3000/pets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newPet),
+      });
+
+      if (res.ok) {
+        alert('Mascota registrada correctamente');
+        location.reload();
+      } else {
+        alert('Error al registrar mascota');
+      }
     });
-
-  // ➕ Submit new pet
-  document.getElementById('pet-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const nuevaMascota = {
-      nombre: document.getElementById('pet-nombre').value.trim(),
-      peso: parseFloat(document.getElementById('pet-peso').value),
-      edad: parseInt(document.getElementById('pet-edad').value),
-      raza: document.getElementById('pet-raza').value.trim(),
-      temperamento: document.getElementById('pet-temperamento').value.trim(),
-      anotaciones: document.getElementById('pet-anotaciones').value.trim(),
-      userId: currentUser.id
-    };
-
-    const res = await fetch('http://localhost:3000/pets', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(nuevaMascota),
-    });
-
-    if (res.ok) {
-      alert('Mascota registrada correctamente');
-      location.reload();
-    } else {
-      alert('Error al registrar mascota');
-    }
-  });
-}
+  }
 }

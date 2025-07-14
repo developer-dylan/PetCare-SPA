@@ -51,13 +51,5 @@ function actualizarHeader(path) {
         location.hash = '#/';
       });
     }
-  } else {
-    navContainer.innerHTML = `
-      <button id="logout-btn">Cerrar sesión</button>
-    `;
-    document.getElementById('logout-btn').addEventListener('click', () => {
-      localStorage.removeItem('currentUser');
-      location.hash = '#/';
-    });
   }
 }
