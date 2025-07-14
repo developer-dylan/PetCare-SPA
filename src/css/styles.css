@@ -1,0 +1,429 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f9ff;
+  color: #333;
+  min-height: 100vh;
+}
+
+/* HEADER */
+header {
+  background-color: #003f5c;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+
+
+header h1 {
+  display: inline-block;
+  font-size: 1.8em;
+  margin: 0;
+}
+
+header button {
+  display: none;
+}
+
+/* FOOTER */
+footer {
+  background-color: #003f5c;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  margin-top: 40px;
+}
+
+/* COMMON FORM STYLE */
+form {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+form input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+form button {
+  background-color: #0077cc;
+  color: white;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+form button:hover {
+  background-color: #005fa3;
+}
+
+/* SECTION TITLE */
+h2, h3 {
+  text-align: center;
+  margin-top: 20px;
+  color: #003f5c;
+}
+
+/* Dashboard container */
+.dashboard-section {
+  padding: 20px;
+  background-color: #e3f2fd;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.dashboard-section h2 {
+  color: #0d47a1;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.dashboard-section h3,
+.dashboard-section h4 {
+  color: #1565c0;
+  margin-top: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  background-color: white;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+li strong {
+  color: #0d47a1;
+}
+
+button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  margin: 5px 3px 0 0;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #1565c0;
+}
+
+button:disabled {
+  background-color: #90a4ae;
+  cursor: not-allowed;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+form input,
+form textarea {
+  padding: 8px;
+  border: 1px solid #b0bec5;
+  border-radius: 4px;
+}
+
+#logout-btn {
+  background-color: #ef5350;
+}
+
+#logout-btn:hover {
+  background-color: #d32f2f;
+}
+
+#stay-management,
+#dashboard-content {
+  margin-top: 20px;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 600px) {
+  form, .dashboard-section {
+    padding: 15px;
+  }
+
+  form input, form button {
+    font-size: 0.9em;
+  }
+
+  h2, h3 {
+    font-size: 1.2em;
+  }
+
+  li {
+    font-size: 0.95em;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  form, .dashboard-section {
+    padding: 25px;
+  }
+
+  form input, form button {
+    font-size: 1em;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+  form, .dashboard-section {
+    padding: 30px;
+  }
+}
+
+@media (min-width: 1441px) {
+  form, .dashboard-section {
+    padding: 40px;
+  }/* === RESET === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f9ff;
+  color: #333;
+}
+
+/* LAYOUT FLEXIBLE PARA FOOTER AL FONDO */
+#app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header, footer {
+  flex-shrink: 0;
+}
+
+main#app {
+  flex: 1;
+  padding: 20px;
+}
+
+/* HEADER */
+header {
+  background-color: #003f5c;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 1.8em;
+  margin: 0;
+}
+
+header button {
+  display: none;
+}
+
+/* FOOTER */
+footer {
+  background-color: #003f5c;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+/* FORMULARIOS */
+form {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 500px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+form input,
+form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+form button {
+  background-color: #0077cc;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+form button:hover {
+  background-color: #005fa3;
+}
+
+/* DASHBOARD */
+.dashboard-section {
+  padding: 20px;
+  background-color: #e3f2fd;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.dashboard-section h2 {
+  color: #0d47a1;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.dashboard-section h3,
+.dashboard-section h4 {
+  color: #1565c0;
+  margin-top: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  background-color: white;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+li strong {
+  color: #0d47a1;
+}
+
+button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  margin: 5px 3px 0 0;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #1565c0;
+}
+
+button:disabled {
+  background-color: #90a4ae;
+  cursor: not-allowed;
+}
+
+#logout-btn {
+  background-color: #ef5350;
+}
+
+#logout-btn:hover {
+  background-color: #d32f2f;
+}
+
+#stay-management,
+#dashboard-content {
+  margin-top: 20px;
+}
+
+/* TITULOS */
+h2, h3 {
+  text-align: center;
+  margin-top: 20px;
+  color: #003f5c;
+}
+
+/* RESPONSIVE DESIGN */
+
+/* MOBILE (hasta 600px) */
+@media (max-width: 600px) {
+  form, .dashboard-section {
+    padding: 15px;
+  }
+
+  form input, form textarea {
+    font-size: 14px;
+  }
+
+  button {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  header h1 {
+    font-size: 1.4em;
+  }
+}
+
+/* TABLET (601px - 900px) */
+@media (min-width: 601px) and (max-width: 900px) {
+  form {
+    max-width: 600px;
+  }
+
+  header h1 {
+    font-size: 1.6em;
+  }
+
+  .dashboard-section {
+    padding: 25px;
+  }
+}
+
+/* LAPTOP (901px - 1200px) */
+@media (min-width: 901px) and (max-width: 1200px) {
+  form {
+    max-width: 700px;
+  }
+}
+
+/* DESKTOP (1201px en adelante) */
+@media (min-width: 1201px) {
+  form {
+    max-width: 800px;
+  }
+}
+
+}

@@ -1,0 +1,36 @@
+{
+  "roles": [
+    {
+      "id": 1,
+      "name": "worker"
+    },
+    {
+      "id": 2,
+      "name": "customer"
+    }
+  ],
+  "users": [
+    {
+      "id": "c838",
+      "name": "Admin",
+      "identidad": 1234567890,
+      "telefono": "0000000000",
+      "direccion": "Calle 0 # 0 0",
+      "email": "admin@admin.com",
+      "password": "admin12345",
+      "rolId": 1
+    },
+    {
+      "id": "006a",
+      "name": "User",
+      "identidad": "0987654321",
+      "telefono": "1111111111",
+      "direccion": "Calle 1 # 1 1",
+      "email": "user@user.com",
+      "password": "user12345",
+      "rolId": 2
+    }
+  ],
+  "pets": [],
+  "stays": []
+}
