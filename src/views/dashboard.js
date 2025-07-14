@@ -9,7 +9,6 @@ export function showDashboard(container) {
   // Set dashboard layout
   container.innerHTML = `
     <section class="dashboard-section">
-      <h2>Bienvenido, ${currentUser.name}</h2>
       <div id="dashboard-content"></div>
       <button id="logout-btn">Cerrar sesión</button>
     </section>
@@ -25,7 +24,9 @@ export function showDashboard(container) {
 
   // WORKER VIEW
   if (currentUser.rolId === 1) {
+    // Mostrar saludo solo en la pantalla principal
     content.innerHTML = `
+      <h2>Bienvenido, ${currentUser.name}</h2>
       <h3>Panel del Administrador</h3>
       <section>
         <h4>Usuarios registrados:</h4>
@@ -286,20 +287,20 @@ export function showDashboard(container) {
   // CUSTOMER VIEW 
   if (currentUser.rolId === 2) {
     content.innerHTML = `
-    <h3>Mis Mascotas</h3>
-    <ul id="pet-list">Cargando...</ul>
-
-    <h4>Registrar nueva mascota</h4>
-    <form id="pet-form">
-      <input type="text" id="pet-name" placeholder="Nombre" required />
-      <input type="number" id="pet-weight" placeholder="Peso (kg)" required />
-      <input type="number" id="pet-age" placeholder="Edad (años)" required />
-      <input type="text" id="pet-race" placeholder="Raza" required />
-      <input type="text" id="pet-temper" placeholder="Temperamento" required />
-      <input type="text" id="pet-annotation" placeholder="Anotaciones (opcional)" />
-      <button type="submit">Registrar Mascota</button>
-    </form>
-  `;
+      <h2>Bienvenido, ${currentUser.name}</h2>
+      <h3>Mis Mascotas</h3>
+      <ul id="pet-list">Cargando...</ul>
+      <h4>Registrar nueva mascota</h4>
+      <form id="pet-form">
+        <input type="text" id="pet-name" placeholder="Nombre" required />
+        <input type="number" id="pet-weight" placeholder="Peso (kg)" required />
+        <input type="number" id="pet-age" placeholder="Edad (años)" required />
+        <input type="text" id="pet-race" placeholder="Raza" required />
+        <input type="text" id="pet-temper" placeholder="Temperamento" required />
+        <input type="text" id="pet-annotation" placeholder="Anotaciones (opcional)" />
+        <button type="submit">Registrar Mascota</button>
+      </form>
+    `;
 
     const petList = document.getElementById('pet-list');
 
@@ -408,7 +409,7 @@ export function showDashboard(container) {
           btn.addEventListener('click', async () => {
             const petId = btn.dataset.id;
             const container = document.getElementById('dashboard-content');
-            container.innerHTML = `<h3>Estancias de la mascota ID ${petId}</h3><ul id="stay-list">Cargando...</ul>`;
+            container.innerHTML = `<h3>Estancias de ${petId}</h3><ul id="stay-list">Cargando...</ul>`;
 
             const res = await fetch(`http://localhost:3000/stays?petId=${petId}`);
             const stays = await res.json();
