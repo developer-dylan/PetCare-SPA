@@ -1,70 +1,80 @@
-# PetCare Center SPA
+# PetCare Center - SPA
 
-This is a Single Page Application (SPA) for a PetCare Center. It allows users to register, log in, manage their pets, and handle stays for each pet. The system supports two types of users: **customers** and **workers**.
+This is a simple Single Page Application (SPA) for a pet care center.
+
+## Project Description
+
+This web app lets people:
+- Register as customers
+- Register pets
+- Make care reservations for their pets
+- Log in and see different pages depending on their role (customer or worker)
+
+## Project Structure
+
+```
+project-auth/
+├── index.html              # Main HTML file
+├── src/
+│   ├── css/
+│   │   └── styles.css      # Styles for the app
+│   └── js/
+│       ├── main.js         # App logic and initialization
+│       ├── router.js       # Routes for the SPA
+│       └── views/          # Different pages
+│           ├── login.js
+│           ├── register.js
+│           ├── dashboard.js
+│           ├── dashboardCustomer.js
+│           ├── dashboardWorker.js
+│           ├── landing.js
+│           └── 404.js
+├── package.json            # Project info and dependencies
+```
 
 ## Features
 
-- **User Registration and Login**
-- **Role-based Dashboard**:
-  - Customers can:
-    - Register, edit and delete their pets
-    - View stays for each pet
-  - Workers can:
-    - View all users and pets
-    - Register, edit and delete pets
-    - Manage stays for each pet
-- **LocalStorage authentication**
-- **Responsive design**
+- Login and register forms
+- Different dashboards for each user
+- Simple navigation without reloading the page
+- Basic error page (404)
+
+## How to Run
+
+1. Make sure you have [Node.js](https://nodejs.org/) installed
+2. Open terminal and go to the folder:
+
+```bash
+cd project-auth
+```
+
+3. Install dependencies:
+
+```bash
+npm install
+```
+
+4. Run the project (if there's a script or live server plugin):
+
+```bash
+npx live-server
+```
+
+Or open `index.html` directly in your browser.
 
 ## Technologies Used
 
-- HTML, CSS, JavaScript (Vanilla)
-- `json-server` for fake REST API
-- SPA navigation using hash routing
+- HTML
+- CSS
+- JavaScript
+- SPA Routing (custom)
+- Node.js (for package management)
 
-## Installation
+## Notes
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/your-username/petcare-center-spa.git
-   ```
-
-2. Navigate into the project:
-   ```bash
-   cd petcare-center-spa
-   ```
-
-3. Install `json-server` if you don't have it:
-   ```bash
-   npm install -g json-server
-   ```
-
-4. Start the fake API:
-   ```bash
-   json-server public/db.json
-   ```
-
-5. Open `index.html` in your browser.
-
-## Folder Structure
-
-```
-public/
-  db.json         ← JSON database for users, pets, stays, roles
-views/
-  login.js        ← Login view
-  register.js     ← Registration view
-  dashboard.js    ← Main user dashboard
-  landing.js      ← Home page
-  404.js          ← Not Found view
-js/
-  router.js       ← SPA router logic
-  main.js         ← App entry point
-styles.css        ← Global styles
-index.html        ← Main HTML file
-```
+This is a basic web app made for learning purposes. It does not connect to a real database.
 
 ## Author
 
-Created by [Your Name].  
-Project for learning purposes.
+- Name: Dylan Marín
+- GitHub: [@DylanDeveloper](https://github.com/DylanDeveloper)
