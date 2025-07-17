@@ -4,14 +4,19 @@ import { showRegister } from '../views/register.js';
 import { showDashboard } from '../views/dashboard.js';
 import { showNotFound } from '../views/404.js';
 
-export function router() {
+
   const routes = {
     '': showLanding,
     '#/': showLanding,
     '#/login': showLogin,
     '#/register': showRegister,
     '#/dashboard': showDashboard,
+    '#/not-found': showNotFound
   };
+
+  // Implementation the guard
+
+  export function router() {
 
   const path = location.hash || '#/';
   const currentUser = localStorage.getItem('currentUser');
@@ -26,6 +31,9 @@ export function router() {
   if (path === '#/dashboard' && !currentUser) {
     location.hash = '#/login';
     return;
+  } else {
+    // If route doesn't exist, show 404 page
+    window.location.hash = '#/not-found';
   }
 
   const app = document.getElementById('app');
